@@ -1,0 +1,28 @@
+#!/bin/sh
+# Bloqueia commits que incluam dado sensível (LGPD) ou credencial.
+# Roda pelo sh que acompanha o Git (funciona no Windows e no Linux).
+#
+# O .gitignore já mantém esses arquivos fora do índice; este hook é a segunda
+# linha de defesa para o caso de git add -f, git add de caminho errado etc.
+# Exceções espelhando o .gitignore: .env.example e docs/imagens/.
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACMRTUXB)
+
+PERIGOSO=$(printf '%s\n' "$STAGED" | grep -E \
+  -e '(^|/)(\.env([^.]|$)|saida/|output/|out/|dados/|export/|backup/|backups/|debug/|tmp/|temp/|logs/|traces/|test-results/|playwright-report/|\.auth/)' \
+  -e '\.(xlsx|xls|xlsm|csv|jsonl|har|html|mhtml|png|jpg|jpeg|gif|webm|mp4|log|pem|key|pfx|p12|bak|backup|orig)$' \
+  -e '(^|/)(storage_state|auth|state)\.json$' \
+  -e '(^|/)\.storage\.json$' \
+  -e '(^|/)checkpoint[^/]*\.jsonl?$' \
+  -e '(^|/)trace\.zip$' \
+  | grep -Ev '^docs/imagens/|^\.env\.example$')
+
+if [ -n "$PERIGOSO" ]; then
+  echo "COMMIT BLOQUEADO — arquivo(s) com dado sensível (LGPD/credencial):" >&2
+  echo "$PERIGOSO" >&2
+  echo "" >&2
+  echo "Remova do índice (git rm --cached <arquivo>) e tente de novo." >&2
+  exit 1
+fi
+
+exit 0

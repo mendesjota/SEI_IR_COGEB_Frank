@@ -1,0 +1,106 @@
+# ==========================================================================
+# Este robô manipula dados pessoais SENSÍVEIS: o tipo de processo (Isenção de
+# IR por doença grave, art. 6º da Lei 7.713/88) revela condição de saúde do
+# segurado. Nome + processo juntos já são dado de saúde para efeito da LGPD.
+#
+# As regras abaixo são propositalmente amplas: é melhor precisar de um
+# `git add -f` num arquivo inócuo do que descobrir um laudo no histórico.
+# Commit é praticamente irreversível — quem clonou, clonou.
+# ==========================================================================
+
+# --- Credenciais -----------------------------------------------------------
+# Tudo que começa com .env fica de fora (pega .env.bak, .env.producao,
+# .env - Cópia), com exceção única do template sem valores.
+.env*
+!.env.example
+
+*.pem
+*.key
+*.pfx
+*.p12
+credenciais*
+secrets*
+segredos*
+
+# Sessão autenticada do Playwright: um storage_state é uma sessão do SEI
+# viva num arquivo — vale mais que a senha.
+playwright/.auth/
+storage_state*.json
+auth.json
+state.json
+*.storage.json
+
+# --- Dados extraídos -------------------------------------------------------
+# saida/ é o destino normal, mas as regras por extensão pegam também o que
+# escapar para a raiz (backup do checkpoint antes de uma correção, planilha
+# arrastada para conferência, export improvisado).
+saida/
+output/
+out/
+dados/
+export/
+backup/
+backups/
+
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+*.jsonl
+# Só o arquivo de dados, com extensão: um "checkpoint*" solto engole o
+# sei/checkpoint.py, e o sumiço de um módulo do commit passa despercebido.
+checkpoint*.jsonl
+checkpoint*.json
+*.bak
+*.backup
+*.orig
+*_old.*
+*_copia.*
+* - Cópia.*
+
+# --- Depuração: o conteúdo é a tela do SEI ---------------------------------
+# Um page.content() salvo, um screenshot ou um trace do Playwright carregam
+# o laudo e o nome do segurado renderizados. Vazam tanto quanto a planilha.
+*.html
+*.mhtml
+*.har
+trace.zip
+*.trace.zip
+traces/
+playwright-report/
+test-results/
+debug/
+tmp/
+temp/
+*.log
+logs/
+
+# Imagens e vídeos: screenshots e gravações de sessão. Para versionar uma
+# imagem de documentação, coloque em docs/imagens/ (liberada abaixo) e
+# confira antes que não há nome de segurado na captura.
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webm
+*.mp4
+!docs/imagens/**
+
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv*/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# --- Ferramentas e sistema -------------------------------------------------
+.claude/settings.local.json
+.vscode/*.local.json
+desktop.ini
+Thumbs.db
+.DS_Store
+~$*
