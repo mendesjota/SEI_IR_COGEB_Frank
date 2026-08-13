@@ -1,0 +1,10 @@
+# Dependências diretas do projeto, nas versões testadas.
+# O projeto é gerenciado por uv (pyproject.toml + uv.lock); este arquivo existe
+# para quem preferir o fluxo clássico pip/venv.
+#
+# Instalar:   python -m pip install -r requirements.txt
+# Depois é preciso o navegador:  playwright install chromium
+
+openpyxl==3.1.5
+playwright==1.62.0
+python-dotenv==1.2.2

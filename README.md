@@ -25,6 +25,8 @@ uv run playwright install chromium
 
 > **Por que `uv` e não `python`?** Neste computador não há Python no `PATH` — digitar `python` abre a loja da Microsoft. O `uv` cuida do interpretador e das bibliotecas sozinho. Sempre use `uv run`.
 
+> **Sem `uv`?** As dependências também estão em `requirements.txt` (versões fixadas) para quem prefere `pip install -r requirements.txt`.
+
 ### 1.2 Preencher o `.env`
 
 Na raiz do projeto existe o arquivo `.env`. Ele guarda suas credenciais e **nunca deve ser enviado para lugar nenhum** (já está protegido pelo `.gitignore`).
